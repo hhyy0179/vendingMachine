@@ -2,6 +2,11 @@ import java.util.Scanner;
 
 public class Help {
     Client client = new Client();
+    Admin admin = new Admin();
+    Buy buy = new Buy();
+    Change change = new Change();
+    List list = new List();
+    Quit quit = new Quit();
 
     public void start(){
         Scanner scan = new Scanner(System.in);
@@ -14,8 +19,6 @@ public class Help {
     }
 
     public int checkInputGrammar(String [] cmd){
-
-
         return 0;
     }
 
