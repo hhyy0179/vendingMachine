@@ -1,8 +1,10 @@
+import java.io.IOException;
+
 public class Main {
-    public static void main(String[] args) {
-        Help Help = new Help();
+    public static void main(String[] args) throws IOException {
+        Controller controller = new Controller();
 
         //1.명령어
-        Help.start();
+        controller.start();
     }
 }
