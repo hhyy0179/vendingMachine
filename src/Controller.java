@@ -10,6 +10,10 @@ public class Controller {
     List list = new List();
     Quit quit = new Quit();
 
+    public List getList(){
+        return this.list;
+    }
+
     public void start() throws IOException {
         Scanner scan = new Scanner(System.in);
         String tempCmd;
