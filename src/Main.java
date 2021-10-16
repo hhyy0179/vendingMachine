@@ -2,9 +2,12 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        Controller controller = new Controller();
+        // 시작 할 때 메모리에 올릴 것
+        List.readList();
+        Controller.setCmdList();
 
-        //1.명령어
-        controller.start();
+        //1.명령어 입력받기
+        Controller controller = new Controller();
+        controller.run();
     }
 }
