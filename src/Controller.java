@@ -12,7 +12,6 @@ public class Controller {
 
     Scanner scan = new Scanner(System.in);
 
-
     static public Help getHelp(){
         return help;
     }
@@ -41,8 +40,8 @@ public class Controller {
         //최초 1회 실행시켜서 cmdList를 초기화한다.
         String [] helpArr = {"help", "he", "h","?"};
         String [] listArr = {"list", "li", "ls", "l", "/"};
-        String [] buyArr = {"buy", "bu", "b","$"};
         String [] deposArr = {"depos", "depo", "de","dp", "d", "+"};
+        String [] buyArr = {"buy", "bu", "b","$"};
         String [] changeArr = {"change", "chang", "chan", "cha", "ch", "c", "-"};
         String [] adminArr = {"admin", "admi", "adm", "ad", "a", "%"};
         String [] quitArr = {"quit", "qui", "qu", "q", "."};
@@ -52,10 +51,12 @@ public class Controller {
         for(String obj: listArr){
             cmdList.put(obj, 2);
         }
-        for(String obj: buyArr){
+
+        for(String obj: deposArr){
             cmdList.put(obj, 3);
         }
-        for(String obj: deposArr){
+
+        for(String obj: buyArr){
             cmdList.put(obj, 4);
         }
         for(String obj: changeArr){
@@ -70,26 +71,27 @@ public class Controller {
     }
 
     public void run() throws IOException {
-        System.out.println("[Vending Machine]");
-        System.out.printf("< 현재 금액 : %d >\n", client.currentAmount);
+        while(true){
+            System.out.println("[Vending Machine]");
+            System.out.printf("< 현재 금액 : %d >\n", client.currentAmount);
 
-        //입력받는 부분
-        String scanStr;
-        scanStr = scan.nextLine();
+            //입력받는 부분
+            String scanStr;
+            scanStr = scan.nextLine();
 
-        //String 처리 부분(공백제거)
-        String [] userInput = scanStr.strip().split(" ");
-        ArrayList<String> rUserInput = new ArrayList<String>();
-        for(int i=0; i< userInput.length; i++){
-            if(userInput[i]!=" "){
-                rUserInput.add(userInput[i]);
+            //String 처리 부분(공백제거)
+            String [] userInput = scanStr.strip().split(" ");
+            ArrayList<String> rUserInput = new ArrayList<String>();
+            for(int i=0; i< userInput.length; i++){
+                if(userInput[i]!=" "){
+                    rUserInput.add(userInput[i]);
+                }
             }
+            executeCmd(rUserInput);
         }
-
     }
 
-
-    public void checkGrammar(ArrayList<String> rUserInput) throws IOException {
+    public void executeCmd(ArrayList<String> rUserInput) throws IOException {
         int mode = cmdList.get(rUserInput.get(0));
         switch(mode){
             //help
@@ -141,12 +143,8 @@ public class Controller {
                 }
                 break;
 
-            //buy
-            case 3:
-                break;
-
             //depos
-            case 4:
+            case 3:
                 if(rUserInput.size()==1){
                     System.out.println("--------------------------------\n" +
                             "1 | 50000 2 | 10000\n" +
@@ -185,14 +183,15 @@ public class Controller {
                     }
 
                 }
-
                 break;
+            //buy
+            case 4:
+
 
             //change
             case 5:
             	for(int i=1;i<rUserInput.size();i++) {
             		if(rUserInput.get(i)==" ") continue;
-            		
             		if(rUserInput.get(i)!=" ") {
             			System.out.println("[오류] : 명령어 뒤에 인자가 없어야 합니다. 다시 입력해주세요.");
             			break;
@@ -206,7 +205,6 @@ public class Controller {
             		client.setCurrentAmount(0);
             		break;
             	}
-                break;
 
             //admin
             case 6:
@@ -230,10 +228,6 @@ public class Controller {
             		System.out.println("프로그램을 종료합니다.");
             		break;
             	}
-
-                break;
-
-            //
             //
             default:
                 break;

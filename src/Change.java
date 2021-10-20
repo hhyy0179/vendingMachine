@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import testman.Client;
-
 public class Change {
 	
 	Scanner scan= new Scanner(System.in);
