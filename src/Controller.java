@@ -190,6 +190,22 @@ public class Controller {
 
             //change
             case 5:
+            	for(int i=1;i<rUserInput.size();i++) {
+            		if(rUserInput.get(i)==" ") continue;
+            		
+            		if(rUserInput.get(i)!=" ") {
+            			System.out.println("[오류] : 명령어 뒤에 인자가 없어야 합니다. 다시 입력해주세요.");
+            			break;
+            		}
+            	}
+            	if(client.getCurrentAmount()==0) {
+            		System.out.println("[오류] : 반환할 돈이 없습니다.");
+            		break;
+            	}
+            	else {
+            		client.setCurrentAmount(0);
+            		break;
+            	}
                 break;
 
             //admin
@@ -198,8 +214,26 @@ public class Controller {
 
             //quit
             case 7:
+            	for(int i=1;i<rUserInput.size();i++) {
+            		if(rUserInput.get(i)==" ") continue;
+            		
+            		if(rUserInput.get(i)!=" ") {
+            			System.out.println("[오류] : 명령어 뒤에 인자가 없어야 합니다. 다시 입력해주세요.");
+            			break;
+            		}
+            	}
+            	if(client.getCurrentAmount()!=0) {
+            		System.out.println("[오류]: 잔액이 존재합니다. <’change’ 또는 ‘-‘> 명령어를 입력하여 잔돈을 반환해주세요.");
+            		break;
+            	}
+            	else {
+            		System.out.println("프로그램을 종료합니다.");
+            		break;
+            	}
+
                 break;
 
+            //
             //
             default:
                 break;
