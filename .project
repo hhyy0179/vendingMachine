@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
+<<<<<<< HEAD
 	<name>vendingMachine</name>
+=======
+	<name>VM</name>
+>>>>>>> a25b0397d0f01d37581a5397451b522adf85ef1e
 	<comment></comment>
 	<projects>
 	</projects>
 	<buildSpec>
+<<<<<<< HEAD
 	</buildSpec>
 	<natures>
+=======
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+>>>>>>> a25b0397d0f01d37581a5397451b522adf85ef1e
 	</natures>
 </projectDescription>
