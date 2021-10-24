@@ -5,6 +5,7 @@ public class Controller {
     static Help help = new Help();
     static Client client = new Client();
     static Admin admin = new Admin();
+    static Depos depos = new Depos();
     static Buy buy = new Buy();
     static Change change = new Change();
     static List list = new List();
@@ -51,11 +52,9 @@ public class Controller {
         for(String obj: listArr){
             cmdList.put(obj, 2);
         }
-
         for(String obj: deposArr){
             cmdList.put(obj, 3);
         }
-
         for(String obj: buyArr){
             cmdList.put(obj, 4);
         }
@@ -73,7 +72,8 @@ public class Controller {
     public void run() throws IOException {
         while(true){
             System.out.println("[Vending Machine]");
-            System.out.printf("< 현재 금액 : %d >\n", client.currentAmount);
+            System.out.printf("< 현재 금액 : %d >\n", client.getCurrentAmount());
+            System.out.print(">> ");
 
             //입력받는 부분
             String scanStr;
@@ -93,101 +93,140 @@ public class Controller {
 
     public void executeCmd(ArrayList<String> rUserInput) throws IOException {
         int mode = cmdList.get(rUserInput.get(0));
-        switch(mode){
+        switch(mode) {
             //help
             case 1:
-                if(rUserInput.size()==1){
+                if (rUserInput.size() == 1) {
                     help.printHowToUse();
-                }
-                else if(rUserInput.size()==2){
-                    try{
+                } else if (rUserInput.size() == 2) {
+                    try {
                         int tmp = cmdList.get(rUserInput.get(1));
-                        if(tmp!=1){
+                        if (tmp != 1) {
                             help.printCmdDesc(tmp);
-                        }
-                        else{
+                        } else {
                             help.printInputError();
                         }
-                    }
-                    catch(NullPointerException e){
+                    } catch (NullPointerException e) {
                         help.printInputError();
                     }
-                }
-                else{
+                } else {
                     help.printInputError();
                 }
                 break;
 
             //list
             case 2:
-                if(rUserInput.size()==1){
+                if (rUserInput.size() == 1) {
                     List list = Controller.getList();
 
-                    HashMap<String, Integer> count =list.getCountHM();
+                    HashMap<String, Integer> count = list.getCountHM();
                     Iterator<String> keys = count.keySet().iterator();
-                    System.out.println("------------------------------------------------------------\n" +
-                            "Drink List\n" +
-                            "--------------------------------------------------------------");
-                    while(keys.hasNext()){
+                    System.out.println("-------------------------------\n" +
+                            "          Drink List\n" +
+                            "-------------------------------");
+                    while (keys.hasNext()) {
                         String key = keys.next();
                         int tmp = count.get(key);
-                        if(tmp!=0){
+                        if (tmp != 0) {
                             System.out.printf("%s : %d\n", key, tmp);
-                        }else{
+                        } else {
                             System.out.printf("%s : 품절\n", key);
                         }
                     }
-                }
-                else{
+                    System.out.println();
+                } else {
                     list.printNoArgError();
                 }
                 break;
 
             //depos
             case 3:
-                if(rUserInput.size()==1){
-                    System.out.println("--------------------------------\n" +
-                            "1 | 50000 2 | 10000\n" +
-                            "3 | 5000 4 | 1000\n" +
-                            "5 | 500 6 | 100\n" +
-                            "7 | 50 8 | 10\n" +
-                            "------------------------------------");
-
-                    Client client = Controller.getClient();
-
-                    //입력받는 부분
-                    String scanStr;
-                    scanStr = scan.nextLine();
-
-                    //String 처리 부분(공백제거)
-                    String [] userInput = scanStr.strip().split(" ");
-                    ArrayList<Integer> money = new ArrayList<Integer>();
-                    boolean flag = true;
-                    for(int i=0; i< userInput.length; i++){
-                        if(userInput[i]==" "){
-                            continue;
+                if (rUserInput.size() == 1) {
+                    boolean check = true;
+                    while (true) {
+                        System.out.println("---------------------------------");
+                        System.out.println("1  |   50000  2 |   10000 ");
+                        System.out.println("3  |   5000   4 |   1000 ");
+                        System.out.println("5  |   500    6 |   100 ");
+                        System.out.println("7  |   50     8 |   10 ");
+                        System.out.println("---------------------------------");
+                        System.out.print("입금할 돈을 해당 번호로 입력해 주세요. : ");
+                        String input_num = scan.nextLine();
+                        String[] userInput = input_num.strip().split(" ");
+                        ArrayList <Integer> money = new ArrayList<Integer>();
+                        for (int i = 0; i < userInput.length; i++) {
+                            if (userInput[i] == " ") {
+                                continue;
+                            }
+                            int num = Integer.parseInt(userInput[i]);
+                            if (num >= 1 && num <= 8) {
+                                money.add(num);
+                            } else {
+                                System.out.println("[오류!] : 잘못된 번호 입니다. 다시 입력해 주세요!");
+                                check = false;
+                            }
                         }
-                        int tmp = Integer.parseInt(userInput[i]);
-                        if(1<=tmp && tmp<=8){
-                            money.add(tmp);
-                        }
-                        else{
-                            flag = false;
+                        if (check) {
+                            for (int m : money) {
+                                client.calAmount(m);
+                            }
                             break;
                         }
                     }
-                    if(flag){
-                        for(int i: money) {
-                            client.calAmount(i);
-                        }
-                    }
-
                 }
                 break;
+
             //buy
             case 4:
+                List list = Controller.getList();
 
+                HashMap<String, Integer> count = list.getCountHM();
+                Iterator<String> keys = count.keySet().iterator();
 
+                if (rUserInput.size() == 1) { // 뒤에 인자가 없을 경우
+                    System.out.print("어떤 음료를 구매하시겠습니까? : ");
+                    String drink = scan.next();
+
+                    while (keys.hasNext()) {
+                        String key = keys.next();
+                        int tmp = count.get(key);
+                        if (!key.equals(drink) && tmp != 0) { //목록에 없으면
+                            System.out.println("입력하신 '" + drink + "'는 목록에 존재하지 않는 항목 입니다.");
+                            break;
+                        } else if (tmp == 0) { // 품절상품이면
+                            System.out.println("현재 품절된 상품 입니다. 다른 상품을 선택해 주세요.");
+                            break;
+                        } else if (client.getCurrentAmount() == 0) { //잔액이 0원이면
+                            System.out.println("잔액 부족으로 구매가 불가능 합니다. <’+’ 또는 ‘depos’> 명령어를 입력하여 입금해주세요.");
+                            break;
+                        }
+                        else { //구매 완료
+                            System.out.println("구매가 완료되었습니다.");
+                            break;
+                        }
+                    }
+//
+
+                } else if (rUserInput.size() == 2) { //인자가 2개 일 경우
+                    switch (buy.start(rUserInput.get(1))) {
+                        case 1:
+                            System.out.println("입력하신 '" + rUserInput.get(1) + "'는 목록에 존재하지 않는 항목 입니다.");
+                            break;
+                        case 2:
+                            System.out.println("현재 품절된 상품 입니다. 다른 상품을 선택해 주세요.");
+                            break;
+                        case 3:
+                            System.out.println("잔액 부족으로 구매가 불가능 합니다. <’+’ 또는 ‘depos’> 명령어를 입력하여 입금해주세요.");
+                            break;
+                        case 4:
+                            System.out.println("구매가 완료되었습니다.");
+                            break;
+                    }
+                } else {
+                    System.out.println("잘못된 입력 입니다.");
+                }
+
+                break;
             //change
             case 5:
             	for(int i=1;i<rUserInput.size();i++) {
@@ -202,6 +241,7 @@ public class Controller {
             		break;
             	}
             	else {
+                    System.out.println("돈이 반환되었습니다.");
             		client.setCurrentAmount(0);
             		break;
             	}

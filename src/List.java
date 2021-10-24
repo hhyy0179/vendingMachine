@@ -31,7 +31,7 @@ public class List {
         //프로그램 실행 후 최초 1회만 실행한다.
         //프로그램 실행 중에는 메모리에서 가격과 개수를 관리한다.
         BufferedReader reader = new BufferedReader(
-                new FileReader("./src/stockList.txt")
+                new FileReader("/Users/jadesuiii/vendingMachine/src/stockList.txt")
         );
 
         String str;

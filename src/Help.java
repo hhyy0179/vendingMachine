@@ -3,10 +3,6 @@ import java.util.*;
 
 public class Help {
 
-
-
-
-
     public void printHowToUse(){
         System.out.println("--------------------------------------------------------------------------------\n" +
                 "명령어군 | 올바른 인자들 | 설명\n" +
@@ -60,7 +56,6 @@ public class Help {
                 break;
 
         }
-
 
     }
 
